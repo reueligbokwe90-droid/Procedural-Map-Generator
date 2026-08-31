@@ -1,6 +1,7 @@
 class Space:
     def __init__(self,x,y,data,width,height):
-        self.children = []
+        self.right = None
+        self.left = None
         self.x = x
         self.y = y
         self.width = width
