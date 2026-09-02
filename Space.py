@@ -6,4 +6,5 @@ class Space:
         self.y = y
         self.width = width
         self.height = height
+        self.orientation = None
 
