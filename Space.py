@@ -1,5 +1,5 @@
 class Space:
-    def __init__(self,x,y,data,width,height):
+    def __init__(self,x,y,width,height):
         self.right = None
         self.left = None
         self.x = x
