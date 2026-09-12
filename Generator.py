@@ -14,10 +14,10 @@ def recursive_split(node):
         node (object): This takes a root node and recusrsively divides creating a full
         tree
     """
-    while node.width < MIN_WIDTH or node.height < MIN_WIDTH:
-        return f"Width and height need to be in bounds of Width: {MIN_WIDTH} and Height:{MIN_HEIGHT}"
-    
-    ratio = random.uniform(0.1,0.3)
+    if node.width < MIN_WIDTH * 2 and node.height < MIN_HEIGHT * 2:
+        return
+        
+    ratio = random.uniform(0.4,0.6)
     
     #left space splitting
     left_x = node.x
@@ -27,17 +27,29 @@ def recursive_split(node):
     
     #create the space objects
     left_zone = Space(left_x,left_y,left_width,left_height)
-    recursive_split(left_zone)
+    node.left = left_zone
     
     #right space splitting
-    right_x = node.x + left_x
+    right_x = node.x + left_width
     right_y = node.y
     right_width = node.width - left_width
     right_height = node.height
     
     right_zone = Space(right_x,right_y,right_width,right_height)
+    node.right = right_zone
+    
+    recursive_split(left_zone)
     recursive_split(right_zone)
+   
+def collect_rooms(node, rooms=None):
+    if rooms is None:
+        rooms = []
     
-    
-    
-    
+    if node.left is None and node.right is None:
+        rooms.append(node)
+        return rooms
+
+    else:
+        collect_rooms(node.left, rooms)
+        collect_rooms(node.right, rooms)
+        return rooms
