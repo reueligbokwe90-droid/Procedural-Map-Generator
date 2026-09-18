@@ -7,4 +7,6 @@ class Space:
         self.width = width
         self.height = height
         self.orientation = None
-
+        
+class Room(Space):
+    pass

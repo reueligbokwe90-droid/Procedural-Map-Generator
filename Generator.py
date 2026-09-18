@@ -73,16 +73,5 @@ def collect_rooms(node, rooms=None):
         collect_rooms(node.right, rooms)
         return rooms
     
-    
-root = Space(0,0,2000,2000)
-
-recursive_split(root)
-rooms = collect_rooms(root)
-for room in rooms:
-    print(
-        "x:", room.x,
-        "y:", room.y,
-        "width:", room.width,
-        "height:", room.height
-    )
-
+"""TODO how do you actually create a room like the values.. so we need the wdith 
+and height we will also utilise the x and y coordinated which has such a padding """
