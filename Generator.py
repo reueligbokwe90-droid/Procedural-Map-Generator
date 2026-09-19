@@ -1,4 +1,4 @@
-from Space import Space
+from Space import Space, Room
 import random
 
 MIN_WIDTH = 200
@@ -35,8 +35,7 @@ def recursive_split(node):
         left_zone = Space(left_x,left_y,left_width,left_height)
         node.left = left_zone 
         right_zone = Space(right_x,right_y,right_width,right_height)
-        node.right = right_zone
-        
+        node.right = right_zone    
     else:
         # height splitting
         left_x = node.x
@@ -60,18 +59,32 @@ def recursive_split(node):
     recursive_split(right_zone)
 
    
-def collect_rooms(node, rooms=None):
-    if rooms is None:
-        rooms = []
+def collect_rooms(node,zones=None):
+    if zones is None:
+        zones = []
     
     if node.left is None and node.right is None:
-        rooms.append(node)
-        return rooms
+        zones.append(node)
+        return zones
 
     else:
-        collect_rooms(node.left, rooms)
-        collect_rooms(node.right, rooms)
-        return rooms
+        collect_rooms(node.left,zones)
+        collect_rooms(node.right,zones)
+        return zones
     
-"""TODO how do you actually create a room like the values.. so we need the wdith 
-and height we will also utilise the x and y coordinated which has such a padding """
+def add_rooms(zones):
+    for zone in zones:
+        left_room_x = random.randint(1,zone.width)
+        left_room_y = random.randint(1,zone.height)
+        left_room_width = random.randint(1,zone.width - left_room_x)
+        left_room_height = random.randint(1,zone.height - left_room_y)
+
+        right_room_y = random.randint(1,zone.height)
+        right_room_x = random.randint(1,zone.width)
+        right_room_width = random.randint(1,zone.width - right_room_x)
+        right_room_height = random.randint(1,zone.height - right_room_y)
+
+        left_room = Room(left_room_x, left_room_y, left_room_width, left_room_height)
+        right_room = Room(right_room_x, right_room_y, right_room_width, right_room_height)
+
+        
