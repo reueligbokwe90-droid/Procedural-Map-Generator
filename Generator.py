@@ -63,7 +63,7 @@ def collect_rooms(node,zones=None):
     if zones is None:
         zones = []
     
-    if node.left is None and node.right is None:
+    if node.left is None or node.right is None:
         zones.append(node)
         return zones
 
@@ -74,17 +74,41 @@ def collect_rooms(node,zones=None):
     
 def add_rooms(zones):
     for zone in zones:
-        left_room_x = random.randint(1,zone.width)
-        left_room_y = random.randint(1,zone.height)
-        left_room_width = random.randint(1,zone.width - left_room_x)
-        left_room_height = random.randint(1,zone.height - left_room_y)
-
-        right_room_y = random.randint(1,zone.height)
-        right_room_x = random.randint(1,zone.width)
-        right_room_width = random.randint(1,zone.width - right_room_x)
-        right_room_height = random.randint(1,zone.height - right_room_y)
-
-        left_room = Room(left_room_x, left_room_y, left_room_width, left_room_height)
-        right_room = Room(right_room_x, right_room_y, right_room_width, right_room_height)
-
+        factor = random.uniform(0.6,0.9)
+        factor_2 = random.uniform(0.6,0.9)
         
+        
+        room_width = zone.width * factor
+        room_height = zone.height * factor_2
+        
+        offset_x = random.randint(0,int(zone.width - room_width))
+        offset_y = random.randint(0,int(zone.height - room_height))
+        
+        room_x = zone.x  + offset_x
+        room_y = zone.y + offset_y
+        
+
+        # create Room object
+        room = Room(room_x, room_y, room_width, room_height)
+        zone.room = room
+        
+
+
+space = Space(0,0, 2000, 2000)
+recursive_split(space)
+zones = collect_rooms(space)
+add_rooms(zones)
+
+for zone in zones:
+    print("Zone",
+        "x:", zone.x,
+        "y:", zone.y,
+        "width:", zone.width,
+        "height:", zone.height
+    )
+    print("Room",
+        "x:", zone.room.x,
+        "y:", zone.room.y,
+        "width:", zone.room.width,
+        "height:", zone.room.height
+    )
