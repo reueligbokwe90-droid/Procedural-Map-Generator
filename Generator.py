@@ -1,4 +1,4 @@
-from Space import Space, Room
+from Space import Space, Room, Hallway
 import random
 
 MIN_WIDTH = 200
@@ -63,7 +63,7 @@ def collect_rooms(node,zones=None):
     if zones is None:
         zones = []
     
-    if node.left is None or node.right is None:
+    if node.left is None and node.right is None:
         zones.append(node)
         return zones
 
@@ -92,6 +92,27 @@ def add_rooms(zones):
         room = Room(room_x, room_y, room_width, room_height)
         zone.room = room
         
+def connect_rooms(node, hallways=None):
+    if hallways is None:
+        hallways = []
+        
+    if node.left is None and node.right is None:
+        return [node.room], hallways
+    else:
+        left_rooms, hallways = connect_rooms(node.left,hallways)
+        right_rooms, hallways = connect_rooms(node.right,hallways)
+        
+        left_choice = random.choice(left_rooms)
+        right_choice = random.choice(right_rooms)
+        
+        hallway = Hallway(left_choice,right_choice)
+        hallways.append(hallway)
+        return left_rooms + right_rooms, hallways
+
+        
+    
+    
+        
 
 
 space = Space(0,0, 2000, 2000)
@@ -112,3 +133,4 @@ for zone in zones:
         "width:", zone.room.width,
         "height:", zone.room.height
     )
+    

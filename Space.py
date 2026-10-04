@@ -10,3 +10,8 @@ class Space:
         
 class Room(Space):
     pass
+
+class Hallway:
+    def __init__(self,left_room,right_room):
+        self.left_room = left_room
+        self.right_room = right_room
