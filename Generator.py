@@ -92,45 +92,75 @@ def add_rooms(zones):
         room = Room(room_x, room_y, room_width, room_height)
         zone.room = room
         
+def closest_pair(left_rooms, right_rooms):
+    best_pair = None
+    best_dist = float('inf')
+    for l in left_rooms:
+        for r in right_rooms:
+            lx, ly = l.x + l.width / 2, l.y + l.height / 2
+            rx, ry = r.x + r.width / 2, r.y + r.height / 2
+            dist = (lx - rx) ** 2 + (ly - ry) ** 2  # no need for sqrt, just comparing
+            if dist < best_dist:
+                best_dist = dist
+                best_pair = (l, r)
+    return best_pair
+        
 def connect_rooms(node, hallways=None):
     if hallways is None:
         hallways = []
-        
-    if node.left is None and node.right is None:
+    
+    if node.right is None and node.left is None:
         return [node.room], hallways
+    
     else:
-        left_rooms, hallways = connect_rooms(node.left,hallways)
-        right_rooms, hallways = connect_rooms(node.right,hallways)
+        l_rooms, hallways = connect_rooms(node.left,hallways)
+        r_rooms, hallways = connect_rooms(node.right,hallways)
         
-        left_choice = random.choice(left_rooms)
-        right_choice = random.choice(right_rooms)
+        halls = Hallway(random.choice(l_rooms), random.choice(r_rooms))
         
-        hallway = Hallway(left_choice,right_choice)
-        hallways.append(hallway)
-        return left_rooms + right_rooms, hallways
-
+        hallways.append(halls)
         
+        return l_rooms + r_rooms, hallways
     
-    
-        
+         
 
 
-space = Space(0,0, 2000, 2000)
+space = Space(0, 0, 2000, 1500)
 recursive_split(space)
 zones = collect_rooms(space)
 add_rooms(zones)
 
 for zone in zones:
-    print("Zone",
+
+    print(
+        "Zone",
         "x:", zone.x,
         "y:", zone.y,
         "width:", zone.width,
         "height:", zone.height
     )
-    print("Room",
+
+    print(
+        "Room",
         "x:", zone.room.x,
         "y:", zone.room.y,
         "width:", zone.room.width,
         "height:", zone.room.height
     )
-    
+
+
+rooms, hallways = connect_rooms(space)
+
+print("\n--- HALLWAYS ---")
+print("Number of hallways:", len(hallways))
+
+for hallway in hallways:
+    print(
+        "Hallway:",
+        "Left room:",
+        hallway.left_room.x,
+        hallway.left_room.y,
+        "→ Right room:",
+        hallway.right_room.x,
+        hallway.right_room.y
+    )
